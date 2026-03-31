@@ -27,7 +27,6 @@ const Dashboard = () => {
   const fetchUsers = async () => {
     try {
       const data = await api("/kaviosUsers"); 
-      // Only include users that exist in the system (logged in)
       setAllUsers(Array.isArray(data) ? data.filter(user => user.email) : []);
     } catch (err) {
       toast.error("Failed to fetch users.");

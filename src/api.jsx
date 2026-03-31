@@ -1,6 +1,6 @@
 import { getToken, clearTokenAndRedirect } from "./auth";
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = "https://kaviospix-backend-m6eg.onrender.com";
 
 export const api = async (endpoint, method = "GET", body) => {
   const token = getToken();

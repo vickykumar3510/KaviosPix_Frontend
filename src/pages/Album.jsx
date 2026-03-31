@@ -150,7 +150,7 @@ const Album = () => {
               >
                 {img.filePath && (
                   <img
-                    src={`http://localhost:3000/${img.filePath}`}
+                    src={`https://kaviospix-backend-m6eg.onrender.com/${img.filePath}`}
                     alt={img.name}
                     style={{
                       width: "100%",

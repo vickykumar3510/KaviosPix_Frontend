@@ -2,7 +2,7 @@ import React from "react";
 
 const Login = () => {
   const handleLogin = () => {
-    window.location.href = "http://localhost:3000/auth/google";
+    window.location.href = "https://kaviospix-backend-m6eg.onrender.com/auth/google";
   };
 
   return (
