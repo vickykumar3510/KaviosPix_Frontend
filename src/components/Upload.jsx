@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { uploadImageApi } from "../api";
+import "./Upload.css";
 
 const Upload = ({ albumId, refresh }) => {
+  const fileInputRef = useRef(null);
   const [file, setFile] = useState(null);
   const [tags, setTags] = useState("");
   const [person, setPerson] = useState("");
@@ -34,6 +36,7 @@ const Upload = ({ albumId, refresh }) => {
       await uploadImageApi(albumId, formData);
 
       setFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
       setTags("");
       setPerson("");
       setIsFavorite(false);
@@ -44,47 +47,53 @@ const Upload = ({ albumId, refresh }) => {
   };
 
   return (
-    <div style={{ marginBottom: "20px" }}>
-      <h3>Upload Image</h3>
+    <section className="uploadPanel" aria-label="Upload image">
+      <h2 className="uploadPanel__title">Upload</h2>
 
-      <input type="file" onChange={(e) => setFile(e.target.files[0])} />
-      <br />
-      <br />
+      <div className="uploadPanel__row">
+        <input
+          ref={fileInputRef}
+          className="uploadPanel__file"
+          type="file"
+          accept="image/*"
+          onChange={(e) => setFile(e.target.files?.[0] || null)}
+        />
+      </div>
 
-      <input
-        type="text"
-        placeholder="Tags (comma separated)"
-        value={tags}
-        onChange={(e) => setTags(e.target.value)}
-      />
-      <br />
-      <br />
+      <div className="uploadPanel__row uploadPanel__row--split">
+        <input
+          className="uploadPanel__field"
+          type="text"
+          placeholder="Tags (comma separated)"
+          value={tags}
+          onChange={(e) => setTags(e.target.value)}
+        />
+        <input
+          className="uploadPanel__field"
+          type="text"
+          placeholder="Person name"
+          value={person}
+          onChange={(e) => setPerson(e.target.value)}
+        />
+      </div>
 
-      <input
-        type="text"
-        placeholder="Person name"
-        value={person}
-        onChange={(e) => setPerson(e.target.value)}
-      />
-      <br />
-      <br />
-
-      <label>
-        Favorite:
+      <label className="uploadPanel__label">
         <input
           type="checkbox"
           checked={isFavorite}
           onChange={(e) => setIsFavorite(e.target.checked)}
-          style={{ marginLeft: "8px" }}
         />
+        Mark as favorite
       </label>
-      <br />
-      <br />
 
-      <button onClick={uploadImage}>Upload</button>
+      <div className="uploadPanel__actions">
+        <button type="button" className="uploadPanel__btn" onClick={uploadImage}>
+          Upload image
+        </button>
+      </div>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
-    </div>
+      {error ? <p className="uploadPanel__error">{error}</p> : null}
+    </section>
   );
 };
 

@@ -27,7 +27,26 @@ function App() {
   }, [navigate]);
 
   if (checkingAuth) {
-    return <div style={{ padding: "20px" }}>Loading...</div>;
+    return (
+      <div
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "20px",
+          boxSizing: "border-box",
+          fontFamily:
+            'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
+          fontSize: "16px",
+          color: "#202124",
+        }}
+        role="status"
+        aria-live="polite"
+      >
+        Loading…
+      </div>
+    );
   }
 
   return (

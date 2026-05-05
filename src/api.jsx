@@ -1,6 +1,8 @@
 import { getToken, clearTokenAndRedirect } from "./auth";
 
-const BASE_URL = "https://kaviospix-backend-m6eg.onrender.com";
+const BASE_URL =
+  import.meta.env.VITE_BACKEND_URL ||
+  "https://kaviospix-backend-m6eg.onrender.com";
 
 export const api = async (endpoint, method = "GET", body) => {
   const token = getToken();

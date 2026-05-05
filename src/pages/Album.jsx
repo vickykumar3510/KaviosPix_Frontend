@@ -1,16 +1,42 @@
 import React, { useEffect, useState } from "react";
 import { api } from "../api";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Upload from "../components/Upload";
 import Navbar from "../components/Navbar";
 import { toast } from "react-toastify";
+import "./Album.css";
+
+const formatUploadedAt = (value) =>
+  new Date(value).toLocaleString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
 
 const Album = () => {
+  const backendBase =
+    import.meta.env.VITE_BACKEND_URL ||
+    "https://kaviospix-backend-m6eg.onrender.com";
+
   const { id } = useParams();
   const [images, setImages] = useState([]);
   const [comments, setComments] = useState({});
   const [tagSearch, setTagSearch] = useState("");
   const [error, setError] = useState("");
+  const [lightbox, setLightbox] = useState(null);
+
+  const closeLightbox = () => setLightbox(null);
+
+  const openLightbox = (img) => {
+    if (!img?.filePath) return;
+    setLightbox({
+      src: `${backendBase}/${img.filePath}`,
+      alt: img.name || "Album image",
+    });
+  };
 
   const fetchImages = async (tags = "") => {
     try {
@@ -91,13 +117,33 @@ const Album = () => {
     fetchImages();
   }, [id]);
 
-  return (
-    <div>
-      <Navbar />
+  useEffect(() => {
+    if (!lightbox) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e) => {
+      if (e.key === "Escape") closeLightbox();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [lightbox]);
 
-      <div style={{ padding: "20px" }}>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
-          <h2>Album Images</h2>
+  return (
+    <div className="albumPage">
+      <Navbar />
+      <div className="albumPage__content">
+        <header className="albumPage__header">
+          <Link className="albumPage__back" to="/">
+            ← Back to albums
+          </Link>
+          <h1 className="albumPage__title">Album Images</h1>
+          <p className="albumPage__subtitle">Upload photos, search by tags, and manage favorites.</p>
+        </header>
+
+        <div className="albumPage__toolbar">
           <Upload
             albumId={id}
             refresh={() => {
@@ -106,110 +152,170 @@ const Album = () => {
             }}
           />
 
-          <div style={{ marginBottom: "20px" }}>
-            <input
-              type="text"
-              placeholder="Search by tags"
-              value={tagSearch}
-              onChange={(e) => setTagSearch(e.target.value)}
-              style={{ marginBottom: "12px" }}
-            />
-            <div>
-              <button onClick={() => fetchImages(tagSearch)} style={{ marginLeft: "8px" }}>
-                Search Tags
+          <div className="albumPage__filters" aria-label="Filter images">
+            <div className="albumPage__filtersRow">
+              <input
+                className="albumPage__field"
+                type="text"
+                placeholder="Search by tags…"
+                value={tagSearch}
+                onChange={(e) => setTagSearch(e.target.value)}
+              />
+              <button
+                type="button"
+                className="albumPage__btn albumPage__btn--primary"
+                onClick={() => fetchImages(tagSearch)}
+              >
+                Search
               </button>
-              <button onClick={fetchFavorites} style={{ marginLeft: "8px" }}>
-                Show Favorites
+            </div>
+            <div className="albumPage__filterActions">
+              <button type="button" className="albumPage__btn" onClick={fetchFavorites}>
+                Favorites only
               </button>
-              <button onClick={() => fetchImages()} style={{ marginLeft: "8px" }}>
-                Show All
+              <button
+                type="button"
+                className="albumPage__btn"
+                onClick={() => {
+                  setTagSearch("");
+                  fetchImages();
+                }}
+              >
+                Show all
               </button>
             </div>
           </div>
         </div>
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <p className="albumPage__error">{error}</p>}
 
         {images.length > 0 ? (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-              gap: "16px",
-            }}
-          >
+          <div className="albumPage__grid">
             {images.map((img) => (
-              <div
-                key={img.imageId}
-                style={{
-                  border: "1px solid #ccc",
-                  padding: "12px",
-                  borderRadius: "8px",
-                  background: "#fafafa",
-                }}
-              >
-                {img.filePath && (
-                  <img
-                    src={`https://kaviospix-backend-m6eg.onrender.com/${img.filePath}`}
-                    alt={img.name}
-                    style={{
-                      width: "100%",
-                      height: "200px",
-                      marginBottom: "10px",
-                      borderRadius: "8px",
-                      objectFit: "cover",
-                    }}
+              <article className="albumImgCard" key={img.imageId}>
+                <div className="albumImgCard__media">
+                  {img.filePath ? (
+                    <button
+                      type="button"
+                      className="albumImgCard__thumbBtn"
+                      onClick={() => openLightbox(img)}
+                      aria-label={`Open larger view: ${img.name || "image"}`}
+                    >
+                      <img
+                        className="albumImgCard__img"
+                        src={`${backendBase}/${img.filePath}`}
+                        alt={img.name || "Album image"}
+                      />
+                    </button>
+                  ) : null}
+                  {img.isFavorite ? (
+                    <span className="albumImgCard__favBadge">★ Favorite</span>
+                  ) : null}
+                </div>
+
+                <h2 className="albumImgCard__name">{img.name || "Untitled"}</h2>
+
+                <div className="albumImgCard__meta">
+                  <div>
+                    <span className="albumImgCard__metaLabel">Person:</span>{" "}
+                    {img.person || "—"}
+                  </div>
+                  <div>
+                    <span className="albumImgCard__metaLabel">Size:</span>{" "}
+                    {img.sizeMB != null ? `${img.sizeMB} MB` : "—"}
+                  </div>
+                  <div>
+                    <span className="albumImgCard__metaLabel">Uploaded:</span>{" "}
+                    {img.uploadedAt ? formatUploadedAt(img.uploadedAt) : "—"}
+                  </div>
+                  <div>
+                    <span className="albumImgCard__metaLabel">Comments:</span>{" "}
+                    {img.comments?.length ? img.comments.join(" · ") : "None"}
+                  </div>
+                </div>
+
+                <div className="albumImgCard__tags" aria-label="Tags">
+                  {img.tags?.length ? (
+                    img.tags.map((tag) => (
+                      <span className="albumImgCard__chip" key={tag}>
+                        {tag}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="albumImgCard__chip albumImgCard__chip--muted">No tags</span>
+                  )}
+                </div>
+
+                <div className="albumImgCard__actions">
+                  <button
+                    type="button"
+                    className={`albumImgCard__btn${img.isFavorite ? " albumImgCard__btn--favActive" : ""}`}
+                    onClick={() => toggleFavorite(img.imageId, img.isFavorite)}
+                  >
+                    {img.isFavorite ? "Remove favorite" : "Favorite"}
+                  </button>
+                  <button
+                    type="button"
+                    className="albumImgCard__btn albumImgCard__btn--danger"
+                    onClick={() => deleteImage(img.imageId)}
+                  >
+                    Delete
+                  </button>
+                </div>
+
+                <div className="albumImgCard__commentRow">
+                  <input
+                    type="text"
+                    className="albumPage__field albumImgCard__field"
+                    placeholder="Add a comment…"
+                    value={comments[img.imageId] || ""}
+                    onChange={(e) =>
+                      setComments((prev) => ({
+                        ...prev,
+                        [img.imageId]: e.target.value,
+                      }))
+                    }
                   />
-                )}
-
-                <p><strong>Name:</strong> {img.name}</p>
-                <p><strong>Favorite:</strong> {img.isFavorite ? "Yes" : "No"}</p>
-                <p><strong>Tags:</strong> {img.tags?.join(", ") || "No tags"}</p>
-                <p><strong>Person:</strong> {img.person || "Not tagged"}</p>
-                <p><strong>Comments:</strong> {img.comments?.join(", ") || "No comments"}</p>
-                <p><strong>Size:</strong> {img.sizeMB} MB</p>
-                <p><strong>Uploaded:</strong> {new Date(img.uploadedAt).toLocaleString()}</p>
-
-                <button onClick={() => toggleFavorite(img.imageId, img.isFavorite)}>
-                  {img.isFavorite ? "Unfavorite" : "Favorite"}
-                </button>
-
-                <button
-                  onClick={() => deleteImage(img.imageId)}
-                  style={{
-                    marginLeft: "8px",
-                    background: "crimson",
-                    color: "white",
-                    padding: "4px 8px",
-                  }}
-                >
-                  Delete
-                </button>
-
-                <br />
-                <br />
-
-                <input
-                  type="text"
-                  placeholder="Add comment"
-                  value={comments[img.imageId] || ""}
-                  onChange={(e) =>
-                    setComments((prev) => ({
-                      ...prev,
-                      [img.imageId]: e.target.value,
-                    }))
-                  }
-                />
-                <button onClick={() => addComment(img.imageId)} style={{ marginLeft: "8px" }}>
-                  Add Comment
-                </button>
-              </div>
+                  <button type="button" className="albumPage__btn" onClick={() => addComment(img.imageId)}>
+                    Add
+                  </button>
+                </div>
+              </article>
             ))}
           </div>
         ) : (
-          <p>No images found.</p>
+          <p className="albumPage__empty">No images in this album yet. Upload one above.</p>
         )}
       </div>
+
+      {lightbox ? (
+        <div
+          className="albumLightbox"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Image preview"
+          onClick={closeLightbox}
+        >
+          <div
+            className="albumLightbox__panel"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="albumLightbox__close"
+              onClick={closeLightbox}
+              aria-label="Close image"
+            >
+              ×
+            </button>
+            <img
+              className="albumLightbox__img"
+              src={lightbox.src}
+              alt={lightbox.alt}
+            />
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 };

@@ -1,0 +1,118 @@
+.uploadPanel {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(218, 220, 224, 0.95);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 1px 2px rgba(60, 64, 67, 0.12), 0 2px 6px rgba(60, 64, 67, 0.08);
+  display: grid;
+  gap: 14px;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.uploadPanel__title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.35px;
+  text-transform: uppercase;
+  color: rgba(32, 33, 36, 0.72);
+}
+
+.uploadPanel__row {
+  display: grid;
+  gap: 10px;
+}
+
+@media (min-width: 560px) {
+  .uploadPanel__row--split {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.uploadPanel__file {
+  font-size: 13px;
+  color: #202124;
+}
+
+.uploadPanel__field {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 12px;
+  border-radius: 12px;
+  border: 1px solid #dadce0;
+  background: #fff;
+  color: #202124;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.uploadPanel__field:focus {
+  border-color: rgba(26, 115, 232, 0.65);
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.12);
+}
+
+.uploadPanel__field::placeholder {
+  color: rgba(95, 99, 104, 0.85);
+}
+
+.uploadPanel__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #202124;
+  cursor: pointer;
+  user-select: none;
+}
+
+.uploadPanel__label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #1a73e8;
+  cursor: pointer;
+}
+
+.uploadPanel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.uploadPanel__btn {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 1px solid #1a73e8;
+  background: #1a73e8;
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(60, 64, 67, 0.12), 0 2px 6px rgba(60, 64, 67, 0.08);
+  transition: background 120ms ease, border-color 120ms ease;
+}
+
+.uploadPanel__btn:hover {
+  background: #1669d6;
+  border-color: #1669d6;
+}
+
+.uploadPanel__btn:focus-visible {
+  outline: 2px solid rgba(26, 115, 232, 0.35);
+  outline-offset: 2px;
+}
+
+.uploadPanel__error {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(217, 48, 37, 0.08);
+  border: 1px solid rgba(217, 48, 37, 0.22);
+  color: #c5221f;
+  font-size: 13px;
+}

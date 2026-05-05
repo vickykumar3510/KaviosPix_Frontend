@@ -1,0 +1,139 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  padding: 8px 0;
+  background: linear-gradient(180deg, #f4f5f7, #e8eaed);
+  border-bottom: 1px solid rgba(60, 64, 67, 0.14);
+  box-shadow: 0 10px 26px rgba(60, 64, 67, 0.06);
+  overflow: clip;
+}
+
+@supports (backdrop-filter: blur(10px)) {
+  .navbar {
+    backdrop-filter: blur(10px);
+    background: linear-gradient(180deg, rgba(244, 245, 247, 0.86), rgba(232, 234, 237, 0.82));
+  }
+}
+
+.navbar__inner {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* do not change positions */
+  gap: 12px;
+  min-height: 52px;
+  box-sizing: border-box;
+}
+
+.navbar__spacer {
+  height: 68px; /* navbar height + vertical padding */
+}
+
+.navbar__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #1f2328;
+  font-weight: 750;
+  letter-spacing: 0.2px;
+  padding: 6px 8px;
+  border-radius: 14px;
+  transition: background 140ms ease, box-shadow 140ms ease;
+}
+
+.navbar__brand:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.navbar__brand:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.16);
+}
+
+/* Same mark as login page `.photosIcon` */
+.navbar__logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: inline-block;
+  flex-shrink: 0;
+  background:
+    radial-gradient(circle at 50% 16%, #4285f4 0 46%, transparent 47%),
+    radial-gradient(circle at 84% 50%, #34a853 0 46%, transparent 47%),
+    radial-gradient(circle at 50% 84%, #fbbc05 0 46%, transparent 47%),
+    radial-gradient(circle at 16% 50%, #ea4335 0 46%, transparent 47%),
+    radial-gradient(circle at 50% 50%, #ffffff 0 36%, transparent 37%);
+}
+
+.navbar__brandText {
+  display: grid;
+  line-height: 1.1;
+}
+
+.navbar__brandName {
+  font-size: 15px;
+}
+
+.navbar__brandTagline {
+  font-size: 12px;
+  font-weight: 650;
+  color: rgba(31, 35, 40, 0.62);
+}
+
+.navbar__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar__btn {
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(60, 64, 67, 0.18);
+  background: rgba(255, 255, 255, 0.7);
+  color: #1f2328;
+  font-weight: 650;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.navbar__btn:hover {
+  background: rgba(255, 255, 255, 0.88);
+  border-color: rgba(60, 64, 67, 0.26);
+  box-shadow: 0 12px 28px rgba(60, 64, 67, 0.16);
+}
+
+.navbar__btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.16);
+}
+
+.navbar__btn--danger {
+  background: rgba(217, 48, 37, 0.9);
+  border-color: rgba(217, 48, 37, 0.9);
+  color: #fff;
+}
+
+.navbar__btn--danger:hover {
+  background: rgba(197, 34, 31, 0.95);
+  border-color: rgba(197, 34, 31, 0.95);
+}
+
+@media (max-width: 520px) {
+  .navbar__inner {
+    padding: 10px 10px;
+  }
+  .navbar__brandTagline {
+    display: none;
+  }
+}
+
