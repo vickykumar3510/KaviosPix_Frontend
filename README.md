@@ -33,7 +33,6 @@ Watch a walkthrough of all the major features of this app: [Google Drive Link]()
 
 **Login Page**
 - Google OAuth login button provided for secure sign‑in
-- JWT token issued after login for session handling
 - Brand name and logo displayed on the login card
 - Clear headline welcoming users to KaviosPix
 - Terms & Privacy Policy link shown below the login form
