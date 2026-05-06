@@ -32,6 +32,62 @@
 .uploadPanel__file {
   font-size: 13px;
   color: #202124;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #dadce0;
+  background: #fff;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+/* Style the native "Choose file" button */
+.uploadPanel__file::file-selector-button {
+  height: 36px;
+  padding: 0 14px;
+  margin-right: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(26, 115, 232, 0.35);
+  background: rgba(26, 115, 232, 0.08);
+  color: #1a73e8;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.25px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease, transform 60ms ease;
+}
+
+.uploadPanel__file::-webkit-file-upload-button {
+  height: 36px;
+  padding: 0 14px;
+  margin-right: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(26, 115, 232, 0.35);
+  background: rgba(26, 115, 232, 0.08);
+  color: #1a73e8;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.25px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease, transform 60ms ease;
+}
+
+.uploadPanel__file:hover::file-selector-button,
+.uploadPanel__file:hover::-webkit-file-upload-button {
+  background: rgba(26, 115, 232, 0.12);
+  border-color: rgba(26, 115, 232, 0.55);
+}
+
+.uploadPanel__file:active::file-selector-button,
+.uploadPanel__file:active::-webkit-file-upload-button {
+  transform: translateY(1px);
+}
+
+.uploadPanel__file:focus-visible {
+  outline: 2px solid rgba(26, 115, 232, 0.35);
+  outline-offset: 2px;
 }
 
 .uploadPanel__field {
