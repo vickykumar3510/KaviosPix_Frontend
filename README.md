@@ -27,7 +27,7 @@ npm start
  * Google OAuth
 
 ## Demo Video
-Watch a walkthrough of all the major features of this app: [Google Drive Link]()
+Watch a walkthrough of all the major features of this app: [Google Drive Link](https://drive.google.com/file/d/1DWcsQ69xXiW89opzDD4ltMHo0tHJ4POx/view?usp=sharing)
 
 ## Features
 
