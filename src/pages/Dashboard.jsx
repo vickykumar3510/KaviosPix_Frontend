@@ -7,6 +7,7 @@ import "./Dashboard.css";
 
 const Dashboard = () => {
   const [albums, setAlbums] = useState([]);
+  const [albumSearch, setAlbumSearch] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [shareEmail, setShareEmail] = useState({});
@@ -118,6 +119,14 @@ const Dashboard = () => {
     fetchUsers(); 
   }, []);
 
+  const searchQuery = albumSearch.trim();
+
+  const filteredAlbums = searchQuery
+    ? albums.filter((album) =>
+        album.name?.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : albums;
+
   return (
     <div className="dashboard">
       <Navbar />
@@ -146,11 +155,32 @@ const Dashboard = () => {
           </div>
         </div>
 
+        <div className="dashboard__search" aria-label="Search albums">
+          <input
+            className="field"
+            type="text"
+            placeholder="Search by album name…"
+            value={albumSearch}
+            onChange={(e) => setAlbumSearch(e.target.value)}
+          />
+          {searchQuery && (
+            <div className="dashboard__searchActions">
+              <button
+                type="button"
+                className="btn btn--secondary btn--sm"
+                onClick={() => setAlbumSearch("")}
+              >
+                Clear search
+              </button>
+            </div>
+          )}
+        </div>
+
         {error && <p className="dashboard__error">{error}</p>}
 
-        {albums.length > 0 ? (
+        {filteredAlbums.length > 0 ? (
           <div className="albumGrid">
-            {albums.map((album) => (
+            {filteredAlbums.map((album) => (
               <div className="albumCard" key={album.albumId}>
                 <div className="albumCard__header">
                   <h3 className="albumCard__title">
@@ -259,7 +289,11 @@ const Dashboard = () => {
             ))}
           </div>
         ) : (
-          <p className="dashboard__empty">No albums found.</p>
+          <p className="dashboard__empty">
+            {albums.length > 0 && searchQuery
+              ? `No albums match "${searchQuery}".`
+              : "No albums found."}
+          </p>
         )}
       </div>
     </div>
